@@ -1,0 +1,47 @@
+5. 给定一个二叉树，返回路径等于k的路径节点数组(没写完，面试官跳过了，可能是因为对我印象比较好吧)
+
+
+typescript
+范型
+类的约束方式
+
+
+
+# 对html seo 做优化
+- title 
+- 优化代码结构，尽量使用语义化标签 header section article footer ...
+- 避免坏链
+- a标签 的 title
+- 图片的 alt 属性
+# 白屏时间计算
+performance api
+
+# flex
+flex 弹性布局
+display flex 可以设置任何一个元素
+
+包括 container 和 item 两部分，flex 子元素为 item
+
+容器默认有两个轴，主轴 和 交叉轴
+
+控制主轴排列方式：justify-content
+控制交叉轴排列方式：align-item
+
+子元素属性：flex-basic / flex-grow / flex-shrink
+
+
+vue 的缺陷
+
+- props属性 不能被 v-modal 
+- 需要记忆模版用法，对于初学者有门槛
+- mixins 复用问题
+- 不变的属性，也需要在data上挂载，才能在模版上引用
+- 生态  
+- 维护
+- watch deep
+- 对象劫持时，watch  newVal === oldVal 时
+
+defer 和 script
+普通script，加载 和 执行 都会阻塞
+defer，加载执行会放到dom渲染完毕后
+script 加载不阻塞dom渲染，执行会阻塞

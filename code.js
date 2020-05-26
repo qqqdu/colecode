@@ -1,2 +1,3 @@
 let b = 3
-let a = 234 + b
+let aname = 234 + b
+aname = b * 234

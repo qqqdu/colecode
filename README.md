@@ -7,6 +7,7 @@ funny code base on javascript parse
 ```javascript
 let b = 3
 let a = 2 + b
+function hello() {}
 ```
 
 #### step1  

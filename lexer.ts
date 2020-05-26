@@ -1,8 +1,21 @@
 import * as fs from 'fs'
+enum TOKEN_TYPE {
+  definition = 0,
+  letters = 1,
+  assignment = 2,
+  number = 3,
+  operator = 4,
+}
+
 interface Token {
   line: number,
   char: string,
   type: number
+}
+interface Keyword {
+  name: string
+  type: string
+  id: number
 }
 class Lexer {
   code: string
@@ -10,7 +23,16 @@ class Lexer {
   nowLine: number = 0
   token:Array<Token> = []
   nowStr: string = ''
+  keywordTable:Array<Keyword> = []
+  regexpList = {
+    declare: '^[a-zA-Z_]\w*$'
+  }
   constructor() {
+    this.keywordTable = [{
+      name: 'let',
+      type: 'definition',
+      id: TOKEN_TYPE.definition
+    }]
     this.readFile()
     this.readChar()
     console.log(this.token)
@@ -22,36 +44,53 @@ class Lexer {
         if(/\n/.test(char)) {
           this.nowLine++
         }
-        continue
       }
       this.readSign(char)
     }
   }
   readSign(char) {
+    console.log(char)
     if(char === '=') {
-      this.pushToken(char, 2, this.nowLine)
+      this.pushToken(char, TOKEN_TYPE.assignment, this.nowLine)
     } else if(char === '+') {
-      this.pushToken(char, 4, this.nowLine)
+      this.pushToken(char, TOKEN_TYPE.operator, this.nowLine)
     } else if(char === '-') {
-      this.pushToken(char, 4, this.nowLine)
+      this.pushToken(char, TOKEN_TYPE.operator, this.nowLine)
     } else if(char === '*') {
-      this.pushToken(char, 4, this.nowLine)
+      this.pushToken(char, TOKEN_TYPE.operator, this.nowLine)
     } else if(char === '/') {
-      this.pushToken(char, 4, this.nowLine)
+      this.pushToken(char, TOKEN_TYPE.operator, this.nowLine)
     } else if(char > '0' && char < '9') {
       this.readNumber(char)
+    // start with a-z/A-z/_
+    } else if(/[a-zA-Z_]/.test(char)) {
+      this.readDeclare(char)
     } else {
       console.error(char)
     }
   }
   readNumber(char: string) {
-    console.log('readynum', char)
     if(char > '0' && char < '9') {
       this.nowStr += char
       this.readNumber(this.nextChar())
     } else if(this.nowStr) {
       this.pervChar()
       this.pushToken(this.nowStr, 3, this.nowLine)
+      this.nowStr = ''
+    }
+  }
+  readDeclare(char: string) {
+    if(/\w/.test(char) && char) {
+      this.nowStr += char
+      this.readDeclare(this.nextChar())
+    } else if(this.nowStr) {
+      this.pervChar()
+      const item = this.keywordTable.find((item) => {item.name === this.nowStr})
+      if(item) {
+        this.pushToken(this.nowStr, item.id, this.nowLine)
+      } else {
+        this.pushToken(this.nowStr, 1, this.nowLine)
+      }
       this.nowStr = ''
     }
   }
